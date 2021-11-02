@@ -6,15 +6,17 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item><from-file /></v-tab-item>
-      <v-tab-item>teste2</v-tab-item>
+      <v-tab-item><manual /></v-tab-item>
     </v-tabs-items>
   </v-main>
 </template>
 <script>
 import FromFile from "./FromFile.vue";
+import Manual from "./Manual.vue";
 export default {
   components: {
     FromFile,
+    Manual,
   },
   data: () => ({
     tab: 0,
