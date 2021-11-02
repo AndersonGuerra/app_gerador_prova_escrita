@@ -17,8 +17,10 @@
     "core-js": "^3.6.5",
     "crypto-js": "^4.1.1",
     "pdfmake": "^0.2.2",
+    "sort-array": "^4.1.4",
     "vue": "^2.6.11",
-    "vuetify": "^2.4.0"
+    "vuetify": "^2.4.0",
+    "xlsx": "^0.17.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
