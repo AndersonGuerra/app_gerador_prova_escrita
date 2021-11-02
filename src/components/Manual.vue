@@ -38,6 +38,9 @@
       <v-col>
         <v-text-field v-model="process" label="Concurso"></v-text-field>
       </v-col>
+      <v-col>
+          <v-text-field v-model="date" label="Data"></v-text-field>
+      </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -52,6 +55,7 @@ export default {
   data: () => ({
     process: "",
     candidate: {},
+    date: '',
   }),
   methods: {
     async generatePdf() {

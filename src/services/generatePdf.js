@@ -8,8 +8,7 @@ const unchecked =
 
 async function generatePdf(process, candidate, pageNumber, pageBreak) {
   const warnSizes = 9;
-  const code = barcode("11122233344");
-  console.log(code);
+  const code = barcode(candidate.number);
   const rows = [];
 
   const startingLine = pageNumber * 25 - 25;

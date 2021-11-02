@@ -14,7 +14,7 @@ export default function (text) {
     };
     bwipjs.toCanvas(canvas, opt);
     // document.getElementById("my-img").src =
-    return canvas.toDataURL("image/jpeg"); //.split(";base64,")[1];
+    return canvas.toDataURL(); //.split(";base64,")[1];
   } catch (e) {
     return "";
   }
