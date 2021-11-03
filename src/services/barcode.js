@@ -1,7 +1,7 @@
 const bwipjs = require("bwip-js");
 import { MD5 } from "crypto-js";
 
-export default function (text) {
+export default async function (text) {
   try {
     let canvas = document.createElement("canvas");
     const hashed = MD5(text).toString();
@@ -12,7 +12,7 @@ export default function (text) {
       scale: 1,
       height: 10,
     };
-    bwipjs.toCanvas(canvas, opt);
+    await bwipjs.toCanvas(canvas, opt);
     // document.getElementById("my-img").src =
     return canvas.toDataURL(); //.split(";base64,")[1];
   } catch (e) {

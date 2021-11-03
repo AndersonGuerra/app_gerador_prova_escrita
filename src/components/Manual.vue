@@ -22,16 +22,10 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field
-          v-model="candidate.area"
-          label="Área"
-        ></v-text-field>
+        <v-text-field v-model="candidate.area" label="Área"></v-text-field>
       </v-col>
       <v-col>
-        <v-text-field
-          v-model="candidate.place"
-          label="Local"
-        ></v-text-field>
+        <v-text-field v-model="candidate.place" label="Local"></v-text-field>
       </v-col>
     </v-row>
     <v-row>
@@ -39,7 +33,7 @@
         <v-text-field v-model="process" label="Concurso"></v-text-field>
       </v-col>
       <v-col>
-          <v-text-field v-model="date" label="Data"></v-text-field>
+        <v-text-field v-model="date" label="Data"></v-text-field>
       </v-col>
     </v-row>
     <v-row>
@@ -55,11 +49,11 @@ export default {
   data: () => ({
     process: "",
     candidate: {},
-    date: '',
+    date: "",
   }),
   methods: {
     async generatePdf() {
-      await generatePdf(this.process, this.candidate, 1);
+      await generatePdf(true, this.process, this.candidate, 1);
     },
   },
 };

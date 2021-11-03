@@ -38,18 +38,64 @@
   </v-container>
 </template>
 <script>
+// import generatePdf from "../services/generatePdf";
+import generatePdfList from "../services/generatePdfList";
 import sortArray from "sort-array";
 import xlsx from "xlsx";
-// import generatePdf from "../services/generatePdf";
 export default {
   data: () => ({
     process: "",
     date: "",
+    fileCounter: 0,
     candidatesFile: null,
     ensalamentoFile: null,
     candidates: null,
     ensalamento: null,
   }),
+  watch: {
+    fileCounter: function (val) {
+      if (val === 2) {
+        const dados = {};
+        for (let i = 0; i < this.ensalamento?.length; i++) {
+          const sala = this.ensalamento[i];
+          const maxCandidates = sala[" Nº  DE CANDIDATOS"];
+          dados[sala["SALA"]] = [];
+          for (let j = 0; j < maxCandidates; j++) {
+            const candidatesInArea = this.candidates.filter(
+              (e) => parseInt(e["AREA"].substring(5)) === sala["ÁREA"]
+            );
+            if (candidatesInArea?.length > 0) {
+              dados[sala["SALA"]].push({
+                area: candidatesInArea[0]["AREA"],
+                number: candidatesInArea[0]["N. INSC."],
+                name: candidatesInArea[0]["NOME DO CANDIDATO"],
+                place: sala["SALA"],
+              });
+              const candidateIndex = this.candidates.findIndex(
+                (e) =>
+                  e["NOME DO CANDIDATO"] ===
+                  candidatesInArea[0]["NOME DO CANDIDATO"]
+              );
+              if (candidateIndex > -1) {
+                this.candidates.splice(candidateIndex, 1);
+              }
+            }
+          }
+        }
+        const salas = Object.keys(dados);
+        for (let i = 0; i < salas.length; i++) {
+          const sala = salas[i];
+          generatePdfList(
+            dados[sala],
+            this.process,
+            dados[sala][0]["area"],
+            dados[sala][0]["place"]
+          );
+        }
+        this.fileCounter = 0;
+      }
+    },
+  },
   methods: {
     async generatePdf() {
       const reader1 = new FileReader();
@@ -62,12 +108,14 @@ export default {
           by: ["AREA", "NOME DO CANDIDATO"],
         });
         this.candidates = sheetJson;
+        this.fileCounter++;
       };
       reader2.onload = () => {
         const workbook = xlsx.read(reader2.result);
         const sheet = workbook.SheetNames[0];
         let sheetJson = xlsx.utils.sheet_to_json(workbook.Sheets[sheet], {});
         this.ensalamento = sheetJson;
+        this.fileCounter++;
       };
       reader1.readAsArrayBuffer(this.candidatesFile);
       reader2.readAsArrayBuffer(this.ensalamentoFile);
