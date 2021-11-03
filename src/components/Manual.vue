@@ -2,12 +2,6 @@
   <v-container>
     <v-row>
       <v-col>
-        A planilha de condidatos deve possuir a seguintes colunas:
-        <strong>AREA, NÚMERO DE INSCRIÇÃO e NOME</strong>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
         <v-text-field
           v-model="candidate.name"
           label="Nome do candidato"
