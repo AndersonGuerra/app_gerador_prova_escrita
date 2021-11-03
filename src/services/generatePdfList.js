@@ -7,14 +7,17 @@ export default function (list, process, area, sala) {
   const content = [];
   for (let i = 0; i < list.length; i++) {
     const item = list[i];
-    const pdfItem = generatePdf(false, process, item);
-    console.log(pdfItem);
-    pdfMake.createPdf({ content: pdfItem }).download("hum.pdf");
-    content.push(pdfItem);
-    break;
+    const pdfItem = generatePdf(false, process, item, 1);
+    content.push(
+      pdfItem,
+      i !== list.length - 1
+        ? {
+            text: "",
+            pageBreak: "after",
+          }
+        : {}
+    );
   }
-  console.log(content);
-  area;
-  sala;
-  //   pdfMake.createPdf({ content }).download(`lista ${area} - ${sala}.pdf`);
+  console.log("hum");
+  pdfMake.createPdf({ content }).download(`lista ${area} - ${sala}.pdf`);
 }
