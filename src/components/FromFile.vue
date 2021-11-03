@@ -53,7 +53,7 @@ export default {
     ensalamento: null,
   }),
   watch: {
-    fileCounter: function (val) {
+    fileCounter: async function (val) {
       if (val === 2) {
         const dados = {};
         for (let i = 0; i < this.ensalamento?.length; i++) {
@@ -85,7 +85,7 @@ export default {
         const salas = Object.keys(dados);
         for (let i = 0; i < salas.length; i++) {
           const sala = salas[i];
-          generatePdfList(
+          await generatePdfList(
             dados[sala],
             this.process,
             dados[sala][0]["area"],
