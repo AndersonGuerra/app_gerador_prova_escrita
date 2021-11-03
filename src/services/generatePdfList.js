@@ -18,6 +18,5 @@ export default function (list, process, area, sala) {
         : {}
     );
   }
-  console.log("hum");
   pdfMake.createPdf({ content }).download(`lista ${area} - ${sala}.pdf`);
 }
