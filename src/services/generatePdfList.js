@@ -19,10 +19,11 @@ export default function (list, process, area, sala, date, pageMaxNumber) {
           : {}
       );
     }
-    pdfMake
-      .createPdf({ content })
-      .download(`lista ${area} - ${sala}.pdf`, () => {
-        res("feito");
-      });
+    pdfMake.createPdf({ content }).getBuffer((result) => res(result));
+    // pdfMake
+    //   .createPdf({ content })
+    //   .download(`lista ${area} - ${sala}.pdf`, () => {
+    //     res("feito");
+    //   });
   });
 }

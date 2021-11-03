@@ -44,7 +44,8 @@
   </v-container>
 </template>
 <script>
-// import generatePdf from "../services/generatePdf";
+import jszip from "jszip";
+import { saveAs } from "file-saver";
 import generatePdfList from "../services/generatePdfList";
 import sortArray from "sort-array";
 import xlsx from "xlsx";
@@ -90,9 +91,11 @@ export default {
           }
         }
         const salas = Object.keys(dados);
+        // const pdfList = [];
+        const zip = new jszip();
         for (let i = 0; i < salas.length; i++) {
           const sala = salas[i];
-          await generatePdfList(
+          const pdf = await generatePdfList(
             dados[sala],
             this.process,
             dados[sala][0]["area"],
@@ -100,7 +103,16 @@ export default {
             this.date,
             this.pageMaxNumber
           );
+          zip.file(
+            `lista ${dados[sala][0]["area"]} - ${dados[sala][0]["place"]}.pdf`,
+            pdf,
+            { binary: true }
+          );
+          // pdfList.push(pdf);
         }
+        const zipFile = await zip.generateAsync({ type: "blob" });
+        saveAs(zipFile, "lista.zip");
+
         this.fileCounter = 0;
       }
     },
