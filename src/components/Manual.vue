@@ -33,9 +33,16 @@
         <v-text-field v-model="process" label="Concurso"></v-text-field>
       </v-col>
       <v-col>
+        <v-text-field
+          v-model="pageMaxNumber"
+          label="Número de páginas"
+        ></v-text-field>
+      </v-col>
+      <v-col>
         <v-text-field v-model="date" label="Data"></v-text-field>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col>
         <v-btn color="primary" block @click="generatePdf">Gerar prova</v-btn>
@@ -50,10 +57,17 @@ export default {
     process: "",
     candidate: {},
     date: "",
+    pageMaxNumber: 1,
   }),
   methods: {
     async generatePdf() {
-      await generatePdf(true, this.process, this.candidate, 1);
+      await generatePdf(
+        true,
+        this.process,
+        this.candidate,
+        this.pageMaxNumber,
+        this.date
+      );
     },
   },
 };

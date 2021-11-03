@@ -10,13 +10,14 @@ export default function (list, process, area, sala) {
       const item = list[i];
       const pdfItem = generatePdf(false, process, item, 1);
       content.push(
-        pdfItem,
-        i !== list.length - 1
-          ? {
-              text: "",
-              pageBreak: "after",
-            }
-          : {}
+        pdfItem
+        // TODO: verificar se precisa do pagebreak aqui
+        // i !== list.length - 1
+        //   ? {
+        //       text: "",
+        //       pageBreak: "after",
+        //     }
+        //   : {}
       );
     }
     pdfMake

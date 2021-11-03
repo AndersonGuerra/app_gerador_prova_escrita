@@ -89,7 +89,8 @@ export default {
             dados[sala],
             this.process,
             dados[sala][0]["area"],
-            dados[sala][0]["place"]
+            dados[sala][0]["place"],
+            this.date
           );
         }
         this.fileCounter = 0;
