@@ -41,6 +41,7 @@
         <v-btn color="primary" block @click="generatePdf">Gerar provas</v-btn>
       </v-col>
     </v-row>
+    <loading :loading="loading" />
   </v-container>
 </template>
 <script>
@@ -49,8 +50,13 @@ import { saveAs } from "file-saver";
 import generatePdfList from "../services/generatePdfList";
 import sortArray from "sort-array";
 import xlsx from "xlsx";
+import Loading from "./Loading.vue";
 export default {
+  components: {
+    Loading,
+  },
   data: () => ({
+    loading: false,
     process: "",
     date: "",
     pageMaxNumber: 1,
@@ -108,10 +114,10 @@ export default {
             pdf,
             { binary: true }
           );
-          // pdfList.push(pdf);
         }
         const zipFile = await zip.generateAsync({ type: "blob" });
         saveAs(zipFile, "lista.zip");
+        this.loading = false;
 
         this.fileCounter = 0;
       }
@@ -119,6 +125,7 @@ export default {
   },
   methods: {
     async generatePdf() {
+      this.loading = true;
       const reader1 = new FileReader();
       const reader2 = new FileReader();
       reader1.onload = () => {
