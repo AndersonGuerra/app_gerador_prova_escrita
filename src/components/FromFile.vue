@@ -13,6 +13,12 @@
       <v-col>
         <v-text-field v-model="date" label="Data"></v-text-field>
       </v-col>
+      <v-col>
+        <v-text-field
+          v-model="pageMaxNumber"
+          label="Número de páginas"
+        ></v-text-field>
+      </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -46,6 +52,7 @@ export default {
   data: () => ({
     process: "",
     date: "",
+    pageMaxNumber: 1,
     fileCounter: 0,
     candidatesFile: null,
     ensalamentoFile: null,
@@ -90,7 +97,8 @@ export default {
             this.process,
             dados[sala][0]["area"],
             dados[sala][0]["place"],
-            this.date
+            this.date,
+            this.pageMaxNumber
           );
         }
         this.fileCounter = 0;
