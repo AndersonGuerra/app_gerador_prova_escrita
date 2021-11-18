@@ -72,18 +72,18 @@ export default {
         const dados = {};
         for (let i = 0; i < this.ensalamento?.length; i++) {
           const sala = this.ensalamento[i];
-          const maxCandidates = sala[" Nº  DE CANDIDATOS"];
-          dados[sala["SALA"]] = [];
+          const maxCandidates = sala[" Nº DE CANDIDATOS"];
+          dados[`${sala["BLOCOS"]}${sala["SALA"]}`] = [];
           for (let j = 0; j < maxCandidates; j++) {
             const candidatesInArea = this.candidates.filter(
               (e) => parseInt(e["AREA"].substring(5)) === sala["ÁREA"]
             );
             if (candidatesInArea?.length > 0) {
-              dados[sala["SALA"]].push({
+              dados[`${sala["BLOCOS"]}${sala["SALA"]}`].push({
                 area: candidatesInArea[0]["AREA"],
                 number: candidatesInArea[0]["N. INSC."],
                 name: candidatesInArea[0]["NOME DO CANDIDATO"],
-                place: sala["SALA"],
+                place: `${sala["BLOCOS"]} - SALA ${sala["SALA"]}`,
               });
               const candidateIndex = this.candidates.findIndex(
                 (e) =>
@@ -110,7 +110,9 @@ export default {
             this.pageMaxNumber
           );
           zip.file(
-            `lista ${dados[sala][0]["area"]} - ${dados[sala][0]["place"]}.pdf`,
+            `lista ${dados[sala][0]["area"]} - ${dados[sala][0][
+              "place"
+            ].replaceAll("/", "-")}.pdf`,
             pdf,
             { binary: true }
           );

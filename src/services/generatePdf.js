@@ -52,7 +52,7 @@ function generatePage(process, candidate, pageNumber, date) {
         [
           {
             width: "*",
-            text: candidate.place,
+            text: `Local: ${candidate.place}`,
           },
           { width: "*", text: `Data: ${date}` },
         ],
