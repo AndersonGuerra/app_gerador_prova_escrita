@@ -8,6 +8,7 @@ const unchecked =
 
 function generatePage(process, candidate, pageNumber, date) {
   const warnSizes = 9;
+  console.log(candidate.number)
   const code = barcode(candidate.number);
   const rows = [];
   const startingLine = pageNumber * 25 - 25;
