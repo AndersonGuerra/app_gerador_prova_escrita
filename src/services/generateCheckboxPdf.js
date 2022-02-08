@@ -193,34 +193,40 @@ function generatePage(process, candidate, maxQuestions, date) {
         },
       },
       {
-        columns: [
-          [
-            { text: "ASSINATURA DO CANDIDATO", fontSize: 9, width: "*" },
-            {
-              table: {
-                widths: ["*"],
-                body: [[" "]],
-              },
-            },
-          ],
-          { image: code, width: 125 },
-          [
-            {
-              width: "auto",
-              columns: [
-                { image: images.unchecked, width: 10 },
-                { text: "ELIMINADO", width: "auto", fontSize: 9 },
+        table: {
+          widths: ["*", "auto", "auto"],
+          body: [
+            [
+              [
+                textoBasico("ASSINATURA DO CANDIDATO"),
+                {
+                  table: {
+                    widths: ["*"],
+                    body: [[" "]],
+                  },
+                },
               ],
-            },
-            {
-              width: "auto",
-              columns: [
-                { image: images.unchecked, width: 10 },
-                { text: "AUSENTE", width: "auto", fontSize: 9 },
+              { image: code, width: 125 },
+              [
+                {
+                  width: "auto",
+                  columns: [
+                    { image: images.unchecked, width: 10 },
+                    { text: "ELIMINADO", width: "auto", fontSize: 9 },
+                  ],
+                },
+                {
+                  width: "auto",
+                  columns: [
+                    { image: images.unchecked, width: 10 },
+                    { text: "AUSENTE", width: "auto", fontSize: 9 },
+                  ],
+                },
               ],
-            },
+            ],
           ],
-        ],
+        },
+        layout: "noBorders",
       },
       {
         columnGap: 10,

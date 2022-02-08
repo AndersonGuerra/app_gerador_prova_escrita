@@ -49,8 +49,8 @@ export default {
   },
   data: () => ({
     loading: false,
-    process: "COREMU",
-    date: "07/02/2022",
+    process: "Residência Multiprofissional em Saúde Coletiva 2022",
+    date: "13/02/2022",
     maxQuestions: 40,
     fileCounter: 0,
     candidatesFile: null,
