@@ -264,9 +264,9 @@ function generatePage(process, candidates, maxQuestions, date) {
         ],
       },
 
-      { text: " ", fontSize: 110 },
+      { text: " ", fontSize: 100 },
       ...questoes,
-      { text: " ", fontSize: 110 },
+      { text: " ", fontSize: 100 },
       {
         text: "INSTRUÇÕES:",
         bold: true,
