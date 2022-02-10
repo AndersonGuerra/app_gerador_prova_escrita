@@ -158,7 +158,11 @@ function generatePage(process, candidate, maxQuestions, date) {
                 widths: ["*"],
                 body: [
                   [textoBasico(`${process}`)],
-                  [textoBasico(`PROVA: ${candidate["CURSO"]}`)],
+                  [
+                    textoBasico(
+                      `PROVA: ${candidate["CURSO"] ? candidate["CURSO"] : ""}`
+                    ),
+                  ],
                 ],
               },
             },
@@ -173,7 +177,7 @@ function generatePage(process, candidate, maxQuestions, date) {
           body: [
             [
               textoBasico("LOCAL: Bloco de Pós Graduação"),
-              textoBasico(`${candidate["LOCAL"]}`),
+              textoBasico(`${candidate["LOCAL"] ? candidate["LOCAL"] : ""}`),
               textoBasico(`DATA: ${date}`),
             ],
           ],
@@ -289,15 +293,15 @@ function generatePage(process, candidate, maxQuestions, date) {
   };
 }
 
-function generatePdf(i, process, candidate, maxQuestions, date) {
-  if (i === 70) {
-    const page = generatePage(process, candidate, maxQuestions, date);
-    pdfMake.createPdf(page).open(); //("prova.pdf");
-  }
+function generatePdf(/*i,*/ process, candidate, maxQuestions, date) {
+  const page = generatePage(process, candidate, maxQuestions, date);
+  // if (i === 70) {
+  //   pdfMake.createPdf(page).open(); //("prova.pdf");
+  // }
   //   return pages;
-  //   return new Promise((res) => {
-  //     pdfMake.createPdf({ content: page }).getBuffer((result) => res(result));
-  //   });
+  return new Promise((res) => {
+    pdfMake.createPdf(page).getBuffer((result) => res(result));
+  });
 }
 
 export default generatePdf;

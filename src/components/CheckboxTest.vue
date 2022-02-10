@@ -38,7 +38,7 @@
 </template>
 <script>
 import jszip from "jszip";
-// import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";
 import generateCheckboxPdf from "../services/generateCheckboxPdf";
 // import sortArray from "sort-array";
 import xlsx from "xlsx";
@@ -75,16 +75,17 @@ export default {
         const zip = new jszip();
         for (let i = 0; i < this.candidates.length; i++) {
           const pdf = await generateCheckboxPdf(
-            i,
+            /*i,*/
             this.process,
             this.candidates[i],
             this.maxQuestions,
             this.date
           );
-          zip.file(`${i}.pdf`, pdf, { binary: true });
+          console.log(pdf)
+          zip.file(`${this.candidates[i]["NOME"]}.pdf`, pdf, { binary: true });
         }
-        // const zipFile = await zip.generateAsync({ type: "blob" });
-        // saveAs(zipFile, "lista.zip");
+        const zipFile = await zip.generateAsync({ type: "blob" });
+        saveAs(zipFile, "lista.zip");
         this.loading = false;
       };
       reader1.readAsArrayBuffer(this.candidatesFile);
