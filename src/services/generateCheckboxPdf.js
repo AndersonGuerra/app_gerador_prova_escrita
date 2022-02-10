@@ -79,22 +79,18 @@ function colunaQuestao(titulo) {
   };
 }
 
-function generatePage(process, candidate, maxQuestions, date) {
-  //   const warnSizes = 9;
-  //   console.log(process, "processo", candidate, "candaidto");
-  //   const code = barcode(candidate.number);
-  const code = barcode(candidate["INSCRIÇÃO"]);
+function geraQuestoes(maxQuestions) {
   const questoes = [
     {
       columns: [],
     },
   ];
-  for (let i = 1; i <= maxQuestions; i++) {
-    const numeroQuestao = i < 10 ? `0${i}` : i;
+  for (let j = 1; j <= maxQuestions; j++) {
+    const numeroQuestao = j < 10 ? `0${j}` : j;
     questoes[questoes.length - 1].columns.push(
       colunaQuestao(`Q${numeroQuestao}`)
     );
-    if (i % 15 === 0) {
+    if (j % 15 === 0) {
       questoes.push(textoBasico(" ", 1));
       questoes.push({
         columns: [],
@@ -107,9 +103,21 @@ function generatePage(process, candidate, maxQuestions, date) {
       questoes[questoes.length - 1].columns.push(textoBasico(" "));
     }
   }
+  return questoes;
+}
+
+function generatePage(process, candidates, maxQuestions, date) {
+  //   const warnSizes = 9;
+  //   console.log(process, "processo", candidate, "candaidto");
+  //   const code = barcode(candidate.number);
+
   // const fontSize = 9;
-  return {
-    content: [
+  const dd = [];
+  for (let i = 0; i < candidates.length; i++) {
+    const candidate = candidates[i];
+    const code = barcode(candidate["INSCRIÇÃO"]);
+    const questoes = geraQuestoes(maxQuestions);
+    dd.push(
       {
         columns: [
           [
@@ -288,19 +296,23 @@ function generatePage(process, candidate, maxQuestions, date) {
           },
           textoBasico("Qualquer dúvida fale com o fiscal de sala"),
         ],
-      },
-    ],
-  };
+      }
+    );
+    if (i !== candidates.length - 1) {
+      dd.push({ text: "", pageBreak: "after" });
+    }
+  }
+  return dd;
 }
 
-function generatePdf(/*i,*/ process, candidate, maxQuestions, date) {
-  const page = generatePage(process, candidate, maxQuestions, date);
+function generatePdf(/*i,*/ process, candidates, maxQuestions, date) {
+  const pages = generatePage(process, candidates, maxQuestions, date);
   // if (i === 70) {
   //   pdfMake.createPdf(page).open(); //("prova.pdf");
   // }
   //   return pages;
   return new Promise((res) => {
-    pdfMake.createPdf(page).getBuffer((result) => res(result));
+    pdfMake.createPdf({ content: pages }).getBuffer((result) => res(result));
   });
 }
 

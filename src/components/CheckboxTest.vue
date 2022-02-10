@@ -72,17 +72,29 @@ export default {
         const sheet = workbook.SheetNames[0];
         let sheetJson = xlsx.utils.sheet_to_json(workbook.Sheets[sheet], {});
         this.candidates = sheetJson;
-        const zip = new jszip();
+        const candidatesPerRoom = [];
         for (let i = 0; i < this.candidates.length; i++) {
+          const candidate = this.candidates[i];
+          const local = candidate["LOCAL"];
+          if (candidatesPerRoom[local] !== undefined) {
+            candidatesPerRoom[local].push(candidate);
+          } else {
+            candidatesPerRoom[local] = [];
+            candidatesPerRoom[local].push(candidate);
+          }
+        }
+        const rooms = Object.keys(candidatesPerRoom);
+        const zip = new jszip();
+        for (let i = 0; i < rooms.length; i++) {
+          const room = rooms[i]
           const pdf = await generateCheckboxPdf(
             /*i,*/
             this.process,
-            this.candidates[i],
+            candidatesPerRoom[room],
             this.maxQuestions,
             this.date
           );
-          console.log(pdf)
-          zip.file(`${this.candidates[i]["NOME"]}.pdf`, pdf, { binary: true });
+          zip.file(`provas coremu - ${room}.pdf`, pdf, { binary: true });
         }
         const zipFile = await zip.generateAsync({ type: "blob" });
         saveAs(zipFile, "lista.zip");
