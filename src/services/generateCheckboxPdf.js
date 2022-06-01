@@ -3,6 +3,14 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import barcode from "./barcode";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+function mCPF(cpf) {
+  cpf = cpf.replace(/\D/g, "");
+  cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+  cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+  cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  return cpf;
+}
+
 const images = {
   impressao:
     "data:image/png;base64,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AAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABDqow8PjlwBACkcAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAA4pTyP3Zr1+4LKRqfAAAAAElFTkSuQmCC",
@@ -106,207 +114,206 @@ function geraQuestoes(maxQuestions) {
   return questoes;
 }
 
-function generatePage(process, candidates, maxQuestions, date) {
+function generatePage(process, candidate, maxQuestions, date) {
   //   const warnSizes = 9;
   //   console.log(process, "processo", candidate, "candaidto");
   //   const code = barcode(candidate.number);
 
   // const fontSize = 9;
   const dd = [];
-  for (let i = 0; i < candidates.length; i++) {
-    const candidate = candidates[i];
-    const code = barcode(candidate["INSCRIÇÃO"]);
-    const questoes = geraQuestoes(maxQuestions);
-    dd.push(
-      {
-        columns: [
-          [
-            {
-              table: {
-                widths: ["auto", "*"],
-                body: [
-                  [
-                    {
-                      image: images.unifap,
-                      width: 35,
-                    },
-                    {
-                      columns: [
-                        [
-                          {
-                            text: "UNIVERSIDADE FEDERAL DO AMAPÁ",
-                            bold: true,
-                            alignment: "center",
-                          },
-                          {
-                            text: "PRÓ-REITORIA ENSINO DE DE GRADUAÇÃO",
-                            bold: true,
-                            alignment: "center",
-                          },
-                          {
-                            text: "DEPARTAMENTO DE PROCESSOS SELETIVOS E CONCURSOS",
-                            bold: true,
-                            alignment: "center",
-                          },
-                          {
-                            text: "Residência Multiprofissional em Saúde Coletiva 2022",
-                            bold: true,
-                            alignment: "center",
-                          },
-                        ],
-                      ],
-                    },
-                  ],
-                ],
-              },
-            },
-            { text: " ", fontSize: 1 },
-            {
-              table: {
-                widths: ["*"],
-                body: [
-                  [textoBasico(`${process}`)],
-                  [
-                    textoBasico(
-                      `PROVA: ${candidate["CURSO"] ? candidate["CURSO"] : ""}`
-                    ),
-                  ],
-                ],
-              },
-            },
-          ],
-          { image: images.impressao, width: 96 },
-        ],
-      },
-      { text: " ", fontSize: 1 },
-      {
-        table: {
-          widths: ["*", "auto", "auto"],
-          body: [
-            [
-              textoBasico("LOCAL: Bloco de Pós Graduação"),
-              textoBasico(`${candidate["LOCAL"] ? candidate["LOCAL"] : ""}`),
-              textoBasico(`DATA: ${date}`),
-            ],
-          ],
-        },
-      },
-      { text: " ", fontSize: 1 },
-      {
-        table: {
-          widths: ["*", "auto", "auto"],
-          body: [
-            [
-              textoBasico(`NOME: ${candidate["NOME"]}`),
-              textoBasico(`N. INSC.: ${candidate["INSCRIÇÃO"]}`),
-              textoBasico(`CPF: ${candidate["CPF"]}`),
-            ],
-          ],
-        },
-      },
-      {
-        table: {
-          widths: ["*", "auto", "auto"],
-          body: [
-            [
-              [
-                textoBasico("ASSINATURA DO CANDIDATO"),
-                {
-                  table: {
-                    widths: ["*"],
-                    body: [[" "]],
-                  },
-                },
-              ],
-              { image: code, width: 125 },
-              [
-                {
-                  width: "auto",
-                  columns: [
-                    { image: images.unchecked, width: 10 },
-                    { text: "ELIMINADO", width: "auto", fontSize: 9 },
-                  ],
-                },
-                {
-                  width: "auto",
-                  columns: [
-                    { image: images.unchecked, width: 10 },
-                    { text: "AUSENTE", width: "auto", fontSize: 9 },
-                  ],
-                },
-              ],
-            ],
-          ],
-        },
-        layout: "noBorders",
-      },
-      {
-        columnGap: 10,
-        columns: [
-          [
-            textoBasico("ASSINATURA DO FISCAL 1"),
-            {
-              table: {
-                widths: ["*"],
-                body: [[" "]],
-              },
-            },
-          ],
-          [
-            textoBasico("ASSINATURA DO FISCAL 2"),
-            {
-              table: {
-                widths: ["*"],
-                body: [[" "]],
-              },
-            },
-          ],
-        ],
-      },
 
-      { text: " ", fontSize: 100 },
-      ...questoes,
-      { text: " ", fontSize: 100 },
-      {
-        text: "INSTRUÇÕES:",
-        bold: true,
-        fontSize: 9,
-      },
-      {
-        fontSize: 8,
-        ol: [
-          textoBasico(
-            "Confira seus dados impressos nessa folha e assine no local indicado"
-          ),
-          textoBasico("Preencha somente uma resposta por questão"),
-          textoBasico("Não deixe nenhuma questão sem resposta"),
-          textoBasico(
-            "Utilize caneta esferográfica azul ou preta de material transparente para preencher suas respostas"
-          ),
+  const code = barcode(candidate["inscriptionNumber"]);
+  const questoes = geraQuestoes(maxQuestions);
+  dd.push(
+    {
+      columns: [
+        [
           {
-            columns: [
-              {
-                text: textoBasico(
-                  "Preencha somente dentro do campo, conforme modelo: "
-                ),
-                width: "auto",
-              },
-              { image: images.checkFechado, width: 10 },
-            ],
+            table: {
+              widths: ["auto", "*"],
+              body: [
+                [
+                  {
+                    image: images.unifap,
+                    width: 35,
+                  },
+                  {
+                    columns: [
+                      [
+                        {
+                          text: "UNIVERSIDADE FEDERAL DO AMAPÁ",
+                          bold: true,
+                          alignment: "center",
+                        },
+                        {
+                          text: "PRÓ-REITORIA ENSINO DE DE GRADUAÇÃO",
+                          bold: true,
+                          alignment: "center",
+                        },
+                        {
+                          text: "DEPARTAMENTO DE PROCESSOS SELETIVOS E CONCURSOS",
+                          bold: true,
+                          alignment: "center",
+                        },
+                        {
+                          text: "Edital Nº 07/2022 - Técnico-Administrativo em Educação",
+                          bold: true,
+                          alignment: "center",
+                        },
+                      ],
+                    ],
+                  },
+                ],
+              ],
+            },
           },
-          textoBasico("Qualquer dúvida fale com o fiscal de sala"),
+          { text: " ", fontSize: 1 },
+          {
+            table: {
+              widths: ["*"],
+              body: [
+                [textoBasico(`CONCURSO: ${process}`)],
+                [
+                  textoBasico(
+                    `CARGO/OPÇÃO: ${
+                      candidate.course[0].title ? candidate.course[0].title : ""
+                    }`
+                  ),
+                ],
+              ],
+            },
+          },
         ],
-      }
-    );
-    if (i !== candidates.length - 1) {
-      dd.push({ text: "", pageBreak: "after" });
+        { image: images.impressao, width: 96 },
+      ],
+    },
+    { text: " ", fontSize: 1 },
+    {
+      table: {
+        widths: ["*", "auto"],
+        body: [
+          [
+            textoBasico(`LOCAL: ${candidate.room}`),
+            textoBasico(`DATA: ${date}`),
+          ],
+        ],
+      },
+    },
+    { text: " ", fontSize: 1 },
+    {
+      table: {
+        widths: ["*", "auto", "auto"],
+        body: [
+          [
+            textoBasico(`NOME: ${candidate.id_user.name}`),
+            textoBasico(`N. INSC.: ${candidate.inscriptionNumber}`),
+            textoBasico(`CPF: ${mCPF(candidate.id_user.cpf)}`),
+          ],
+        ],
+      },
+    },
+    {
+      table: {
+        widths: [255, "*", "auto"],
+        body: [
+          [
+            [
+              textoBasico("ASSINATURA DO CANDIDATO"),
+              {
+                table: {
+                  widths: ["*"],
+                  body: [[" "]],
+                },
+              },
+            ],
+            { image: code, width: 150, alignment: "center" },
+            [
+              {
+                width: "auto",
+                columns: [
+                  { image: images.unchecked, width: 10 },
+                  { text: "ELIMINADO", width: "auto", fontSize: 9 },
+                ],
+              },
+              {
+                width: "auto",
+                columns: [
+                  { image: images.unchecked, width: 10 },
+                  { text: "AUSENTE", width: "auto", fontSize: 9 },
+                ],
+              },
+            ],
+          ],
+        ],
+      },
+      layout: "noBorders",
+    },
+    {
+      columnGap: 10,
+      columns: [
+        [
+          textoBasico("ASSINATURA DO FISCAL 1"),
+          {
+            table: {
+              widths: ["*"],
+              body: [[" "]],
+            },
+          },
+        ],
+        [
+          textoBasico("ASSINATURA DO FISCAL 2"),
+          {
+            table: {
+              widths: ["*"],
+              body: [[" "]],
+            },
+          },
+        ],
+      ],
+    },
+
+    { text: " ", fontSize: 20 },
+    ...questoes,
+    { text: " ", fontSize: 100 },
+    {
+      text: "INSTRUÇÕES:",
+      bold: true,
+      fontSize: 9,
+    },
+    {
+      fontSize: 8,
+      ol: [
+        textoBasico(
+          "Confira seus dados impressos nessa folha e assine no local indicado"
+        ),
+        textoBasico("Preencha somente uma resposta por questão"),
+        textoBasico("Não deixe nenhuma questão sem resposta"),
+        textoBasico(
+          "Utilize caneta esferográfica azul ou preta de material transparente para preencher suas respostas"
+        ),
+        {
+          columns: [
+            {
+              text: textoBasico(
+                "Preencha somente dentro do campo, conforme modelo: "
+              ),
+              width: "auto",
+            },
+            { image: images.checkFechado, width: 10 },
+          ],
+        },
+        textoBasico("Qualquer dúvida fale com o fiscal de sala"),
+      ],
     }
-  }
+  );
+
+  // dd.push({ text: "", pageBreak: "after" });
+
   return dd;
 }
 
-function generatePdf(/*i,*/ process, candidates, maxQuestions, date) {
-  const pages = generatePage(process, candidates, maxQuestions, date);
+function generatePdf(/*i,*/ process, candidate, maxQuestions, date) {
+  const pages = generatePage(process, candidate, maxQuestions, date);
   // if (i === 70) {
   //   pdfMake.createPdf(page).open(); //("prova.pdf");
   // }
