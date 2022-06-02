@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async generatePdf() {
-      // this.loading = true;
+      this.loading = true;
       // const reader1 = new FileReader();
       // reader1.onload = async () => {
 
@@ -77,7 +77,11 @@ export default {
       let a = await axios.get(
         "http://localhost:3030/inscriptions?id_ps=624762dedb8badce57e19170&$populate=id_user"
       );
+      let salas = [];
       a = a.data.filter((e) => e.accepted_isencao || e.is_paid);
+      a.forEach((i) => {
+        if (!salas.includes(i.room)) salas.push(i.room);
+      });
       this.candidates = [...a];
       // const candidatesPerRoom = [];
       // for (let i = 0; i < this.candidates.length; i++) {
@@ -91,20 +95,26 @@ export default {
       //   }
       // }
       // const rooms = Object.keys(candidatesPerRoom);
-      const zip = new jszip();
-      for (let i = 0; i < 1; i++) {
-        const candidate = this.candidates[i];
-        const pdf = await generateCheckboxPdf(
-          /*i,*/
-          this.process,
-          candidate,
-          this.maxQuestions,
-          this.date
-        );
-        zip.file(`provas - ${candidate._id}.pdf`, pdf, { binary: true });
+      // const zipao = new jszip();
+      for (const sala of salas) {
+        console.log(sala);
+        const zip = new jszip();
+        const candidatesInRoom = this.candidates.filter((e) => e.room === sala);
+        for (let i = 0; i < candidatesInRoom.length; i++) {
+          const candidate = candidatesInRoom[i];
+          const pdf = await generateCheckboxPdf(
+            /*i,*/
+            this.process,
+            candidate,
+            this.maxQuestions,
+            this.date
+          );
+          zip.file(`provas - ${candidate._id}.pdf`, pdf, { binary: true });
+        }
+        const zipFile = await zip.generateAsync({ type: "blob" });
+        saveAs(zipFile, `${sala.replace("/", "-")}.zip`);
+        // zipao.file(`${sala.replace("/", "-")}.zip`, zipFile);
       }
-      const zipFile = await zip.generateAsync({ type: "blob" });
-      saveAs(zipFile, "lista.zip");
       this.loading = false;
 
       // };
