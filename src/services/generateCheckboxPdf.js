@@ -156,7 +156,7 @@ function generatePage(process, candidate, maxQuestions, date) {
                           alignment: "center",
                         },
                         {
-                          text: "Edital Nº 07/2022 - Técnico-Administrativo em Educação",
+                          text: process,
                           bold: true,
                           alignment: "center",
                         },

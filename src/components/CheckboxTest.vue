@@ -51,9 +51,9 @@ export default {
   },
   data: () => ({
     loading: false,
-    process: "Edital Nº 07/2022 - Técnico-Administrativo em Educação",
-    date: "05/06/2022",
-    maxQuestions: 60,
+    process: "PSE/LedoC 2022.1, EDITAL Nº. 08/2022",
+    date: "19/06/2022",
+    maxQuestions: 40,
     fileCounter: 0,
     candidatesFile: null,
     candidates: null,
@@ -75,10 +75,11 @@ export default {
       // const sheet = workbook.SheetNames[0];
       // let sheetJson = xlsx.utils.sheet_to_json(workbook.Sheets[sheet], {});
       let a = await axios.get(
-        "http://localhost:3030/inscriptions?id_ps=624762dedb8badce57e19170&$populate=id_user"
+        "http://localhost:3030/inscriptions?id_ps=62507fc1db8badce57e1a430&$populate=id_user"
       );
       let salas = [];
-      a = a.data.filter((e) => e.accepted_isencao || e.is_paid);
+      // a = a.data.filter((e) => e.accepted_isencao || e.is_paid);
+      a = a.data
       a.forEach((i) => {
         if (!salas.includes(i.room)) salas.push(i.room);
       });
