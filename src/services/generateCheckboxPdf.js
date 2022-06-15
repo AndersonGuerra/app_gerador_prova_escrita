@@ -303,6 +303,7 @@ function generatePage(process, candidate, maxQuestions, date) {
           ],
         },
         textoBasico("Qualquer dúvida fale com o fiscal de sala"),
+        { text: "", pageBreak: "after" },
       ],
     }
   );
@@ -312,8 +313,12 @@ function generatePage(process, candidate, maxQuestions, date) {
   return dd;
 }
 
-function generatePdf(/*i,*/ process, candidate, maxQuestions, date) {
-  const pages = generatePage(process, candidate, maxQuestions, date);
+function generatePdf(/*i,*/ process, candidates, maxQuestions, date) {
+  let pages = [];
+  for (const candidate of candidates) {
+    const candidatePage = generatePage(process, candidate, maxQuestions, date);
+    pages.push(candidatePage);
+  }
   // if (i === 70) {
   //   pdfMake.createPdf(page).open(); //("prova.pdf");
   // }

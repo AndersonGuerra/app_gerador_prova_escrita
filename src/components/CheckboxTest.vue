@@ -79,7 +79,7 @@ export default {
       );
       let salas = [];
       // a = a.data.filter((e) => e.accepted_isencao || e.is_paid);
-      a = a.data
+      a = a.data;
       a.forEach((i) => {
         if (!salas.includes(i.room)) salas.push(i.room);
       });
@@ -101,17 +101,26 @@ export default {
         console.log(sala);
         const zip = new jszip();
         const candidatesInRoom = this.candidates.filter((e) => e.room === sala);
-        for (let i = 0; i < candidatesInRoom.length; i++) {
-          const candidate = candidatesInRoom[i];
-          const pdf = await generateCheckboxPdf(
-            /*i,*/
-            this.process,
-            candidate,
-            this.maxQuestions,
-            this.date
-          );
-          zip.file(`provas - ${candidate._id}.pdf`, pdf, { binary: true });
-        }
+        const pdf = await generateCheckboxPdf(
+          this.process,
+          candidatesInRoom,
+          this.maxQuestions,
+          this.date
+        );
+        // for (let i = 0; i < candidatesInRoom.length; i++) {
+        //   const candidate = candidatesInRoom[i];
+        //   const pdf = await generateCheckboxPdf(
+        //     /*i,*/
+        //     this.process,
+        //     candidate,
+        //     this.maxQuestions,
+        //     this.date
+        //   );
+        //   zip.file(`provas - ${candidate._id}.pdf`, pdf, { binary: true });
+        // }
+        zip.file(`provas - ${sala.replace("/", "-")}.pdf`, pdf, {
+          binary: true,
+        });
         const zipFile = await zip.generateAsync({ type: "blob" });
         saveAs(zipFile, `${sala.replace("/", "-")}.zip`);
         // zipao.file(`${sala.replace("/", "-")}.zip`, zipFile);
