@@ -114,7 +114,7 @@ function geraQuestoes(maxQuestions) {
   return questoes;
 }
 
-function generatePage(process, candidate, maxQuestions, date) {
+function generatePage(process, candidate, maxQuestions, date, pageBreak) {
   //   const warnSizes = 9;
   //   console.log(process, "processo", candidate, "candaidto");
   //   const code = barcode(candidate.number);
@@ -303,11 +303,13 @@ function generatePage(process, candidate, maxQuestions, date) {
           ],
         },
         textoBasico("Qualquer dúvida fale com o fiscal de sala"),
-        { text: "", pageBreak: "after" },
       ],
     }
   );
 
+  if (pageBreak) {
+    dd.push({ text: "", pageBreak: "after" });
+  }
   // dd.push({ text: "", pageBreak: "after" });
 
   return dd;
@@ -315,8 +317,17 @@ function generatePage(process, candidate, maxQuestions, date) {
 
 function generatePdf(/*i,*/ process, candidates, maxQuestions, date) {
   let pages = [];
-  for (const candidate of candidates) {
-    const candidatePage = generatePage(process, candidate, maxQuestions, date);
+  for (let i = 0; i < candidates.length; i++) {
+    const candidate = candidates[i];
+    let pageBreak = true;
+    if (i === candidates.length - 1) pageBreak = false;
+    const candidatePage = generatePage(
+      process,
+      candidate,
+      maxQuestions,
+      date,
+      pageBreak
+    );
     pages.push(candidatePage);
   }
   // if (i === 70) {
