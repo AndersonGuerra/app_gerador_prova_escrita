@@ -177,7 +177,7 @@ function generatePage(process, candidate, maxQuestions, date, pageBreak) {
                   textoBasico(
                     `CARGO/OPÇÃO: ${
                       candidate.course[0].title ? candidate.course[0].title : ""
-                    }`
+                    } - LINGUA ESPANHOLA`
                   ),
                 ],
               ],
@@ -318,6 +318,7 @@ function generatePage(process, candidate, maxQuestions, date, pageBreak) {
 function generatePdf(/*i,*/ process, candidates, maxQuestions, date) {
   let pages = [];
   for (let i = 0; i < candidates.length; i++) {
+    console.log(candidate);
     const candidate = candidates[i];
     let pageBreak = true;
     if (i === candidates.length - 1) pageBreak = false;
