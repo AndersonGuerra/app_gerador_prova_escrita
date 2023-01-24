@@ -47,9 +47,9 @@ export default {
   },
   data: () => ({
     loading: false,
-    process: "Edital Nº 01/2022-DPG/UNIFAP - Exame de Língua Estrangeira para Pós-graduação",
-    date: "07/08/2022",
-    maxQuestions: 15,
+    process: "Processo Seletivo Especial para Curso de Zootecnia UFRA/UNIFAP - Edital 17/2022",
+    date: "29/01/2023",
+    maxQuestions: 30,
     fileCounter: 0,
     candidatesFile: null,
     candidates: null,
@@ -67,15 +67,17 @@ export default {
       const reader1 = new FileReader();
       reader1.onload = async () => {
         const workbook = xlsx.read(reader1.result);
-        const sheet = workbook.SheetNames[2];
+        const sheet = workbook.SheetNames[0];
         let sheetJson = xlsx.utils.sheet_to_json(workbook.Sheets[sheet], {});
         let a = await axios.get(
-          "http://localhost:3030/inscriptions?id_ps=62b1eaade7ab0a07a548d197&$populate=id_user"
+          `http://localhost:3030/inscriptions?id_ps=63a1c7ed48b6fe1bbf783fe8&$populate=id_user`
         );
-        let inscriptions = a.data
+        let inscriptions = a.data.filter(e => e.room)
+        console.log(inscriptions)
 
         const zip = new jszip();
         const candidatesInRoom = []
+        console.log(sheetJson)
         for (const row of sheetJson) {
           let inscription = inscriptions.filter(e => {
             return e.id_user.name === row["NOME"]

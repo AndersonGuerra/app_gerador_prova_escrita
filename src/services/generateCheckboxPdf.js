@@ -177,7 +177,7 @@ function generatePage(process, candidate, maxQuestions, date, pageBreak) {
                   textoBasico(
                     `CARGO/OPÇÃO: ${
                       candidate.course[0].title ? candidate.course[0].title : ""
-                    } - LINGUA ESPANHOLA`
+                    }`
                   ),
                 ],
               ],
