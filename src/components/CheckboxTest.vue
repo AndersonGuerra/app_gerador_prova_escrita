@@ -47,9 +47,9 @@ export default {
   },
   data: () => ({
     loading: false,
-    process: "Processo Seletivo Especial para Curso de Zootecnia UFRA/UNIFAP - Edital 17/2022",
-    date: "29/01/2023",
-    maxQuestions: 30,
+    process: "Programa de Residência Multiprofissional em Saúde Coletiva–COREMU",
+    date: "05/03/2023",
+    maxQuestions: 40,
     fileCounter: 0,
     candidatesFile: null,
     candidates: null,
@@ -70,7 +70,12 @@ export default {
         const sheet = workbook.SheetNames[0];
         let sheetJson = xlsx.utils.sheet_to_json(workbook.Sheets[sheet], {});
         let a = await axios.get(
-          `http://localhost:3030/inscriptions?id_ps=63a1c7ed48b6fe1bbf783fe8&$populate=id_user`
+          `https://depsec.unifap.br/depsec-api/inscriptions?id_ps=63b587eb79490914652b8c45&$populate=id_user`,
+          {
+            headers: {
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE2Nzc2MzM1MjUsImV4cCI6MTY3NzcxOTkyNSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwic3ViIjoiNjA4NjM0M2ZlMDhlN2FlMzQ2ZWQ3MGIxIiwianRpIjoiOGQ1M2Y3YWItMDAxNi00MDQxLTg5M2QtMmFmYWUzMjA3MTIzIn0.tocAB2SEXIPZbAwCK2Yu2pZdDAPTUk2MgColhPvTIsU`
+            }
+          }
         );
         let inscriptions = a.data.filter(e => e.room)
         console.log(inscriptions)
@@ -90,16 +95,26 @@ export default {
         // for (let i = 0; i < candidatesInRoom.length; i++) {
         //   const candidate = candidatesInRoom[i];
         // }
+        let salas = []
+        let inscriptionsCerto = []
+        inscriptions.forEach((i) => {
+          if (!salas.includes(i.room)) salas.push(i.room);
+        });
+        for (let i = 0; i < salas.length; i++) {
+          const sala = salas[i];
+          let inscriptionsAux = inscriptions.filter(e => e.room === sala)
+          inscriptionsCerto.push(...inscriptionsAux)
+        }
         const pdf = await generateCheckboxPdf(
           this.process,
-          candidatesInRoom,
+          inscriptionsCerto,
           this.maxQuestions,
           this.date
         );
-        zip.file(`provas - espanhol.pdf`, pdf, { binary: true });
+        zip.file(`provas.pdf`, pdf, { binary: true });
         const zipFile = await zip.generateAsync({ type: "blob" });
         console.log('hummmmmmmmmmmmmm')
-        saveAs(zipFile, `espanhol.zip`);
+        saveAs(zipFile, `provas.zip`);
       }
       // let salas = [];
       // a = a.data.filter((e) => e.accepted_isencao || e.is_paid);

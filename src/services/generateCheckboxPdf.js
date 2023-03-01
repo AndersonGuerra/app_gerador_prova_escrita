@@ -272,7 +272,7 @@ function generatePage(process, candidate, maxQuestions, date, pageBreak) {
       ],
     },
 
-    { text: " ", fontSize: 20 },
+    { text: " ", fontSize: 30 },
     ...questoes,
     { text: " ", fontSize: 100 },
     {
